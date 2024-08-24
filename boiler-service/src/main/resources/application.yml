@@ -1,0 +1,30 @@
+server:
+  port: 8084
+
+spring:
+  application:
+    name: boiler-service
+  server:
+    error:
+      include-stacktrace: never
+      include-message: always
+      include-binding-errors: always
+  jackson:
+    serialization:
+      indent_output: false
+  datasource:
+    url: jdbc:mysql://localhost:3306/boilers?characterEncoding=utf8
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    defer-datasource-initialization: true
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+      dialect: org.hibernate.dialect.MySQL5Dialect
+#
+#eureka:
+#  client:
+#    service-url:
+#      defaultZone: http://localhost:8081/eureka

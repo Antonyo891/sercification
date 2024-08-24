@@ -57,15 +57,10 @@ public class WeatherService implements WeatherServiceInterface {
                     forecastEntity.setTemperature(w.getValue());
                     return forecastEntity;
                 }).toList();
-        weatherRepository.deleteAll();
         weatherRepository.saveAll(newForecasts);
-        if (lastUpdateWeatherRepository.count()==0) {
-            lastUpdateWeatherRepository.save(new LastUpdateWeatherEntity(LocalDate.now()));
-        } else {
-            LastUpdateWeatherEntity lastUpdateWeatherEntity = lastUpdateWeatherRepository.findAll().getLast();
-            lastUpdateWeatherEntity.setLastUpdate(LocalDate.now());
-            lastUpdateWeatherRepository.save(lastUpdateWeatherEntity);
-        }
+        LastUpdateWeatherEntity lastUpdateWeatherEntity = new LastUpdateWeatherEntity();
+        lastUpdateWeatherEntity.setLastUpdate(LocalDate.now());
+        lastUpdateWeatherRepository.save(lastUpdateWeatherEntity);
         return weatherRepository.findAll();
     }
 
