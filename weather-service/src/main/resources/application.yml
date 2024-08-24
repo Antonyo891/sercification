@@ -1,0 +1,38 @@
+weather-service-properties:
+  base-uri: 'https://api.weather.yandex.ru/v2/forecast'
+  token-name: 'X-Yandex-Weather-Key'
+  timeout: 1000
+  token: '5335dbbe-e5e6-41c9-968b-5e88152e3a23'
+  latitude: '53.1384'
+  longitude: '29.2214'
+
+server:
+  port: 8083
+
+spring:
+  application:
+    name: weather-service
+  server:
+    error:
+      include-stacktrace: never
+      include-message: always
+      include-binding-errors: always
+  jackson:
+    serialization:
+      indent_output: false
+  datasource:
+    url: jdbc:mysql://localhost:3306/weather?characterEncoding=utf8
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    defer-datasource-initialization: true
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+      dialect: org.hibernate.dialect.MySQL5Dialect
+#
+#eureka:
+#  client:
+#    service-url:
+#      defaultZone: http://localhost:8081/eureka
