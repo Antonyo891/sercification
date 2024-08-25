@@ -8,4 +8,5 @@ import java.time.LocalDate;
 
 @Repository
 public interface LastUpdateWeatherRepository extends JpaRepository<LastUpdateWeatherEntity,LocalDate> {
+    LastUpdateWeatherEntity findFirstByOrderByIdDesc();
 }

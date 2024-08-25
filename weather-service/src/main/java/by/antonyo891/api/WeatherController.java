@@ -63,7 +63,7 @@ public class WeatherController {
     public ResponseEntity<WeatherInformation> getWeatherFromServer(){
         log.info("Request for the weather from URI {}", weatherProperties.getBaseUri());
         WeatherInformation weatherInformation = weatherServiceInterface.getWeatherInformationFromServer();
-        log.info("Weather: {}",weatherInformation);
+        log.info("Weather: {}",weatherInformation.getFactWeather());
         return ResponseEntity.status(HttpStatus.OK)
                 .body(weatherInformation);
     }

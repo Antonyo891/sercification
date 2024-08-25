@@ -7,11 +7,13 @@ import by.antonyo891.model.weather.WeatherInformation;
 import by.antonyo891.repository.LastUpdateWeatherRepository;
 import by.antonyo891.repository.WeatherRepository;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientException;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
@@ -19,6 +21,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Slf4j
 @Data
 public class WeatherService implements WeatherServiceInterface {
     @Autowired
@@ -32,6 +35,7 @@ public class WeatherService implements WeatherServiceInterface {
     private final String URI;
     private LocalDate lastUpdateWeather;
     private LocalDate now;
+    private WeatherInformation weatherInformation;
 
     public WeatherService(WeatherProperties weatherProperties) {
         this.weatherProperties = weatherProperties;
@@ -49,7 +53,7 @@ public class WeatherService implements WeatherServiceInterface {
     @Transactional
     private List<WeatherForecastEntity> updateWeather(){
         WeatherInformation weatherInformation = getDateWeather().orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_GATEWAY,
-                "Connection error with the weather server"));
+                "The problem of receiving data from a third-party server"));
         List<WeatherForecastEntity> newForecasts = weatherInformation.getWeeksForecast().entrySet()
                 .stream().map(w->{
                     WeatherForecastEntity forecastEntity = new WeatherForecastEntity();
@@ -61,22 +65,29 @@ public class WeatherService implements WeatherServiceInterface {
         LastUpdateWeatherEntity lastUpdateWeatherEntity = new LastUpdateWeatherEntity();
         lastUpdateWeatherEntity.setLastUpdate(LocalDate.now());
         lastUpdateWeatherRepository.save(lastUpdateWeatherEntity);
-        return weatherRepository.findAll();
+        return weatherRepository.findLast7ByOrderByDate();
     }
 
     @Override
     public List<WeatherForecastEntity> getWeekForecast() {
         if (neededToUpdateTheDatabase()){
-            return updateWeather();
+            try {
+                updateWeather();
+            } catch (WebClientException e){
+                log.error(e.getMessage());
+            }
         }
-        return weatherRepository.findAll();
+        return weatherRepository.findLast7ByOrderByDate();
     }
 
     @Override
     public WeatherForecastEntity getForecastTemperatureForTheDay(LocalDate date) {
         if (neededToUpdateTheDatabase()){
-            updateWeather();
-            return weatherRepository.findByDate(date);
+            try {
+                updateWeather();
+            } catch (WebClientException e){
+                log.error(e.getMessage());
+            }
         }
         return weatherRepository.findByDate(date);
     }
@@ -84,22 +95,31 @@ public class WeatherService implements WeatherServiceInterface {
     @Override
     public WeatherForecastEntity getTemperatureNow() {
         if (neededToUpdateTheDatabase()){
-            updateWeather();
-            return weatherRepository.findByDate(now);
+            try {
+                updateWeather();
+            } catch (WebClientException e){
+                log.error(e.getMessage());
+            }
         }
         return weatherRepository.findByDate(now);
     }
 
     public WeatherInformation getWeatherInformationFromServer(){
-        return getDateWeather().orElseThrow(()->new ResponseStatusException(
-                HttpStatus.BAD_GATEWAY,"Connection error with the weather server")
-        );
+        try {
+            weatherInformation = getDateWeather().orElseThrow(()->new ResponseStatusException(
+                    HttpStatus.BAD_GATEWAY,"The problem of receiving data " +
+                    "from a third-party server"));
+        } catch (WebClientException e){
+            log.error("Connection error with the weather server");
+            throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, e.getMessage());
+        }
+        return weatherInformation;
     }
 
     private boolean neededToUpdateTheDatabase(){
         if (lastUpdateWeatherRepository.count()==0)
             return true;
-        lastUpdateWeather = lastUpdateWeatherRepository.findAll().getLast().getLastUpdate();
+        lastUpdateWeather = lastUpdateWeatherRepository.findFirstByOrderByIdDesc().getLastUpdate();
         now = LocalDate.now();
         return ((lastUpdateWeather==null)||(lastUpdateWeather.isBefore(now)));
     }

@@ -11,5 +11,5 @@ import java.util.List;
 public interface WeatherRepository extends JpaRepository<WeatherForecastEntity,LocalDate> {
 
     WeatherForecastEntity findByDate(LocalDate date);
-    List<WeatherForecastEntity> findFirst7ByOrderByDateDesc();
+    List<WeatherForecastEntity> findLast7ByOrderByDate();
 }

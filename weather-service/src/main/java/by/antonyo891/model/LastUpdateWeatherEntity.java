@@ -16,7 +16,10 @@ import java.time.LocalDate;
 @Table(name = "last_update")
 public class LastUpdateWeatherEntity {
     @Id
-    @Column(name = "last_update_date")
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    Long id;
+
+    @Column(name = "last_update_date",unique = true)
     @JsonProperty(value = "last_update")
     private LocalDate lastUpdate;
 
