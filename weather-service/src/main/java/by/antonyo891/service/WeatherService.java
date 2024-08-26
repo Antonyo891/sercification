@@ -36,6 +36,8 @@ public class WeatherService implements WeatherServiceInterface {
     private LocalDate lastUpdateWeather;
     private LocalDate now;
     private WeatherInformation weatherInformation;
+    private final String BAD_CONNECTION_MESSAGE = "Connection error with the weather server";
+    private final String PROBLEM_WITH_DATA = "The problem of receiving data from a third-party server";
 
     public WeatherService(WeatherProperties weatherProperties) {
         this.weatherProperties = weatherProperties;
@@ -53,7 +55,7 @@ public class WeatherService implements WeatherServiceInterface {
     @Transactional
     private List<WeatherForecastEntity> updateWeather(){
         WeatherInformation weatherInformation = getDateWeather().orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_GATEWAY,
-                "The problem of receiving data from a third-party server"));
+                PROBLEM_WITH_DATA + weatherProperties.getBaseUri() + URI));
         List<WeatherForecastEntity> newForecasts = weatherInformation.getWeeksForecast().entrySet()
                 .stream().map(w->{
                     WeatherForecastEntity forecastEntity = new WeatherForecastEntity();
@@ -74,7 +76,7 @@ public class WeatherService implements WeatherServiceInterface {
             try {
                 updateWeather();
             } catch (WebClientException e){
-                log.error(e.getMessage());
+                log.error(BAD_CONNECTION_MESSAGE + weatherProperties.getBaseUri() + URI);
             }
         }
         return weatherRepository.findLast7ByOrderByDate();
@@ -86,7 +88,7 @@ public class WeatherService implements WeatherServiceInterface {
             try {
                 updateWeather();
             } catch (WebClientException e){
-                log.error(e.getMessage());
+                log.error(BAD_CONNECTION_MESSAGE + weatherProperties.getBaseUri() + URI);
             }
         }
         return weatherRepository.findByDate(date);
@@ -98,7 +100,7 @@ public class WeatherService implements WeatherServiceInterface {
             try {
                 updateWeather();
             } catch (WebClientException e){
-                log.error(e.getMessage());
+                log.error(BAD_CONNECTION_MESSAGE + weatherProperties.getBaseUri() + URI);
             }
         }
         return weatherRepository.findByDate(now);
@@ -107,10 +109,9 @@ public class WeatherService implements WeatherServiceInterface {
     public WeatherInformation getWeatherInformationFromServer(){
         try {
             weatherInformation = getDateWeather().orElseThrow(()->new ResponseStatusException(
-                    HttpStatus.BAD_GATEWAY,"The problem of receiving data " +
-                    "from a third-party server"));
+                    HttpStatus.BAD_GATEWAY,PROBLEM_WITH_DATA + weatherProperties.getBaseUri() + URI));
         } catch (WebClientException e){
-            log.error("Connection error with the weather server");
+            log.error(BAD_CONNECTION_MESSAGE + weatherProperties.getBaseUri() + URI);
             throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, e.getMessage());
         }
         return weatherInformation;
