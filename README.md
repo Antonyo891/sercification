@@ -5,6 +5,11 @@
 #### 2. позволять прогнозировать нагрузки в зависимости от прогнозируемой погоды и имеющихся данных о потребителях тепловой энергии в зависимости от температуры наружного воздуха
 #### 3. расчитывать оптимальное распределение нагрузок между котлоагрегатами для минимального расхода топлива.
 Пока удалось накодить:
-микросервис погоды [weather-service](https://github.com/Antonyo891/sercification/tree/master/weather-service) который получает данные о погоде на 7 дней из ресурса https://api.weather.yandex.ru/v2/forecast.
-микросервис отвечающий за считывание фактического состояния котлоагрегатов и сравнение их с нормативными для определенной нагрузки [boiler-service](https://github.com/Antonyo891/sercification/tree/master/boiler-service). Нормативные характеристики по плану  должны вноситься для каждого имеющегося котлоагрегата.
+##### микросервис погоды [weather-service](https://github.com/Antonyo891/sercification/tree/master/weather-service) который получает данные о погоде на 7 дней из ресурса https://api.weather.yandex.ru/v2/forecast<br>
+##### микросервис отвечающий за считывание фактического состояния котлоагрегатов и сравнение их с нормативными для определенной нагрузки [boiler-service](https://github.com/Antonyo891/sercification/tree/master/boiler-service). Нормативные характеристики по плану  должны вноситься для каждого имеющегося котлоагрегата.
+
+Еще предстоит создание микросервисов:
+station-service который будет рассчитывать нагрузку котельной в определенную дату (в рамках ближайшей недели) использую данные [weather-service](https://github.com/Antonyo891/sercification/blob/master/weather-service/src/main/java/by/antonyo891/api/WeatherController.java) и  [boiler-service](https://github.com/Antonyo891/sercification/blob/master/boiler-service/src/main/java/by/antonyo891/api/BoilerController.java) и объединение микросервисов с использованием eureka.
+Вроде все проходили и понимание как это сделать есть...Но к сожалению пока сделал только это. Буду потихонько обновлять... Надеюсь этого достаточно тобы пройти аттестацию.
+#### В классе [boilerApplication](https://github.com/Antonyo891/sercification/blob/master/boiler-service/src/main/java/by/antonyo891/BoilerApplication.java) закомментирован код для заполенния таблиц для проверки работы микросервиса boiler-service](https://github.com/Antonyo891/sercification/tree/master/boiler-service).
 
