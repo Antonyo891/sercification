@@ -1,3 +1,6 @@
+boiler-service-properties:
+  base-survey-range: 60 000
+
 server:
   port: 8084
 

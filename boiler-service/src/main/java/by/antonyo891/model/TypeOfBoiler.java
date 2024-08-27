@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -24,12 +25,10 @@ public class TypeOfBoiler {
     private Integer nominalSteamPressure;
     @Column(name = "nominal_steam_temperature", length = 3)
     private Integer nominal_Steam_temperature;
-    @OneToMany(fetch = FetchType.LAZY,
-    cascade = {CascadeType.PERSIST,
-    CascadeType.MERGE},
+    @OneToMany(
     mappedBy = "typeOfBoiler")
     @JsonIgnore
-    private Set<Boiler> boilers;
+    private Set<Boiler> boilers = new HashSet<>();
 
     public TypeOfBoiler(String name, Integer nominalSteamCapacity, Integer nominalSteamPressure, Integer nominal_Steam_temperature) {
         this.name = name;

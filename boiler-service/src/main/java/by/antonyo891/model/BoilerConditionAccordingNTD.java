@@ -1,10 +1,10 @@
 package by.antonyo891.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -26,13 +26,14 @@ public class BoilerConditionAccordingNTD {
     private Float efficiencyCoefficient;
 
     @ManyToOne
-    @JoinColumn(name = "boiler_id",nullable = false)
-    private Boiler boiler;
+    @JsonIgnore
+//    @JoinColumn(name = "boiler_id")
+    private Boiler boilerNTD;
 
     public BoilerConditionAccordingNTD(Integer steamConsumption, Float fuelConsumption, Float efficiencyCoefficient, Boiler boiler) {
         this.steamConsumption = steamConsumption;
         this.fuelConsumption = fuelConsumption;
         this.efficiencyCoefficient = efficiencyCoefficient;
-        this.boiler = boiler;
+        this.boilerNTD = boiler;
     }
 }
