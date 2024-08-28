@@ -17,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -63,7 +64,7 @@ public ResponseEntity<List<Boiler>> getBoilers() {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(conditions);
     }
-    @GetMapping(path = "/conditions/NTD")
+    @GetMapping(path = "/NTD/assess")
     @ResponseBody
     public ResponseEntity<Map<BoilerCondition, BoilerConditionAccordingNTD>> getAssess() {
         log.info("Request conditions by now.");
@@ -72,6 +73,19 @@ public ResponseEntity<List<Boiler>> getBoilers() {
         log.info("Boilers :{}", conditions);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(conditions);
+    }
+    @GetMapping(path = "/NTD/optimal")
+    @ResponseBody
+    public ResponseEntity<Map<List<BoilerCondition>,List<BoilerConditionAccordingNTD>>> getOptimalRegime() {
+        log.info("Request optimal regime by now.");
+        List<BoilerCondition> conditions = boilerConditionService.getBoilerConditionByNow().stream().toList();
+        log.info("Boilers condition : {}", conditions);
+        List<BoilerConditionAccordingNTD> optimalRegime = boilerNTDService.getOptimalRegime(conditions);
+        log.info("Boilers optimal Regime: {}", optimalRegime);
+        Map<List<BoilerCondition>,List<BoilerConditionAccordingNTD>> result = new HashMap<>();
+        result.put(conditions,optimalRegime);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(result);
     }
 
 }

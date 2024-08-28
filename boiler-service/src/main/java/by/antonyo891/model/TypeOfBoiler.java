@@ -24,7 +24,7 @@ public class TypeOfBoiler {
     @Column(name = "nominal_steam_pressure", length = 3)
     private Integer nominalSteamPressure;
     @Column(name = "nominal_steam_temperature", length = 3)
-    private Integer nominal_Steam_temperature;
+    private Integer nominalSteamTemperature;
     @OneToMany(
     mappedBy = "typeOfBoiler")
     @JsonIgnore
@@ -34,6 +34,6 @@ public class TypeOfBoiler {
         this.name = name;
         this.nominalSteamCapacity = nominalSteamCapacity;
         this.nominalSteamPressure = nominalSteamPressure;
-        this.nominal_Steam_temperature = nominal_Steam_temperature;
+        this.nominalSteamTemperature = nominal_Steam_temperature;
     }
 }

@@ -10,5 +10,7 @@ import org.springframework.context.annotation.Configuration;
 @EnableConfigurationProperties
 @ConfigurationProperties(prefix = "boiler-service-properties")
 public class BoilerProperties {
-    private long baseSurveyRange;
+    private final long BASE_SURVEY_RANGE;
+    private final int BASIC_STEAM_LOAD_STEP;
+    private final float MINIMUM_BOILER_LOAD;
 }
