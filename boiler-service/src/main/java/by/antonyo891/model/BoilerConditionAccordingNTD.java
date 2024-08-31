@@ -25,9 +25,9 @@ public class BoilerConditionAccordingNTD {
     @Column(name = "efficiency_coefficient")
     private Float efficiencyCoefficient;
 
-    @ManyToOne
+    @ManyToOne()
     @JsonIgnore
-//    @JoinColumn(name = "boiler_id")
+    @JoinColumn(name = "boiler_id")
     private Boiler boilerNTD;
 
     public BoilerConditionAccordingNTD(Integer steamConsumption, Float fuelConsumption, Float efficiencyCoefficient, Boiler boiler) {

@@ -21,8 +21,8 @@ public class BoilerService implements BoilerServiceInterface{
 
     @Override
     public List<Boiler> findAll() {
-
-        return boilerRepository.findAll();
+        List<Boiler> boilers = boilerRepository.findAll();
+        return boilers;
     }
 
     @Override

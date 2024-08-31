@@ -35,22 +35,12 @@ public class BoilerController {
     TypeOfBoilerService typeOfBoilerService;
     @Autowired
     BoilerNTDService boilerNTDService;
-//    @Autowired
-//    private BoilersNTDService boilersNTDService;
-
-//    @PostMapping
-//    public ResponseEntity<Boiler> addBoiler(@RequestBody Boiler boiler){
-//        log.info("Request to add a boiler: {}",boiler);
-//        Boiler newBoiler = boilerService.addBoiler(boiler);
-//        log.info("Boiler {} add.",newBoiler);
-//        return ResponseEntity.status(HttpStatus.OK).body(newBoiler);
-//    }
 @GetMapping(path = "/boilers")
 @ResponseBody
 public ResponseEntity<List<Boiler>> getBoilers() {
     log.info("Request boilers");
     List<Boiler> boilers = boilerService.findAll();
-    log.info("Boilers :{}", boilers);
+    log.info("Boilers :{}", boilers.stream().map(Boiler::getName));
     return ResponseEntity.status(HttpStatus.OK)
             .body(boilers);
 }
@@ -60,7 +50,7 @@ public ResponseEntity<List<Boiler>> getBoilers() {
     public ResponseEntity<Set<BoilerCondition>> getBoilersCondition() {
         log.info("Request conditions by now.");
         Set<BoilerCondition> conditions = boilerConditionService.getBoilerConditionByNow();
-        log.info("Boilers :{}", conditions);
+        log.info("Boilers :{}", conditions.stream().map(BoilerCondition::getId));
         return ResponseEntity.status(HttpStatus.OK)
                 .body(conditions);
     }
@@ -70,7 +60,6 @@ public ResponseEntity<List<Boiler>> getBoilers() {
         log.info("Request conditions by now.");
         Map<BoilerCondition, BoilerConditionAccordingNTD> conditions =
                 boilerNTDService.assessCondition();
-        log.info("Boilers :{}", conditions);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(conditions);
     }
@@ -79,9 +68,9 @@ public ResponseEntity<List<Boiler>> getBoilers() {
     public ResponseEntity<Map<List<BoilerCondition>,List<BoilerConditionAccordingNTD>>> getOptimalRegime() {
         log.info("Request optimal regime by now.");
         List<BoilerCondition> conditions = boilerConditionService.getBoilerConditionByNow().stream().toList();
-        log.info("Boilers condition : {}", conditions);
+        log.info("Boilers condition : {}", conditions.stream().map(BoilerCondition::getSteamConsumption));
         List<BoilerConditionAccordingNTD> optimalRegime = boilerNTDService.getOptimalRegime(conditions);
-        log.info("Boilers optimal Regime: {}", optimalRegime);
+        log.info("Boilers optimal Regime: {}", optimalRegime.stream().map(BoilerConditionAccordingNTD::getSteamConsumption));
         Map<List<BoilerCondition>,List<BoilerConditionAccordingNTD>> result = new HashMap<>();
         result.put(conditions,optimalRegime);
         return ResponseEntity.status(HttpStatus.OK)

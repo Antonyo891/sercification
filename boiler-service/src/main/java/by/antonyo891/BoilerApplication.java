@@ -29,54 +29,65 @@ public class BoilerApplication {
 //        BoilerNTDRepository boilerNTDRepository = context.getBean(BoilerNTDRepository.class);
 //        BoilerRepository boilerRepository = context.getBean(BoilerRepository.class);
 //        TypeOfBoilerRepository typeOfBoilerRepository = context.getBean(TypeOfBoilerRepository.class);
-//        TypeOfBoiler type1 = new TypeOfBoiler(
-//                "БКЗ-210-140",210,140,550);
-//        TypeOfBoiler type2 = new TypeOfBoiler(
-//                "БКЗ-420-140",420,140,550);
+//        TypeOfBoiler type1 = typeOfBoilerRepository.findByName("БКЗ-210-140").get();
+//        TypeOfBoiler type2 = typeOfBoilerRepository.findByName("БКЗ-420-140").get();
 //        type1 = typeOfBoilerRepository.save(type1);
 //        type2 = typeOfBoilerRepository.save(type2);
-//        Boiler boiler1 = new Boiler("station # 1", type1);
-//        Boiler boiler5 = new Boiler("station # 5", type2);
+//        Boiler boiler1 = boilerRepository.findByName("station # 1").get();
+//        Boiler boiler5 = boilerRepository.findByName("station # 5").get();
+//        Boiler boiler2 = boilerRepository.findByName("station # 2").get();
+//        boiler2 = boilerRepository.save(boiler2);
 //        System.out.println("Boilers: ");
 //        System.out.println(boilerRepository.save(boiler1));
 //        System.out.println(boilerRepository.save(boiler5));
 //        float kpdMin1 = 88.0f;
 //        int steam1 = 100;
 //        float fuel1;
+//        float kpdMin2 = 89.0f;
+//        int steam2 = 100;
+//        float fuel2;
 //        int steam5 = 210;
-//        float kpdMin5 = 89.0f;
+//        float kpdMin5 = 89.6f;
 //        float fuel5;
 //
-//        Set<BoilerConditionAccordingNTD> boilerConditions1 = new HashSet<>();
-//        Set<BoilerConditionAccordingNTD> boilerConditions5 = new HashSet<>();
+//        Set<BoilerConditionAccordingNTD> boilerNTD1 = new HashSet<>();
+//        Set<BoilerConditionAccordingNTD> boilerNTD2 = new HashSet<>();
+//        Set<BoilerConditionAccordingNTD> boilerNTD5 = new HashSet<>();
 //        for (int i = 0; i<10; i++){
-//            steam1 = steam1+11;
-//            kpdMin1 = kpdMin1 + 0.8f;
-//            fuel1 = (steam1*0.6f)/(kpdMin1*7/100);
-//            steam5 = steam5+21;
-//            kpdMin5 = kpdMin5 + 0.8f;
-//            fuel5 = (steam5*0.6f)/(kpdMin5*7/100);
-//            boilerConditions1.add(new BoilerConditionAccordingNTD(steam1,fuel1,kpdMin1,boiler1));
-//            boilerConditions5.add(new BoilerConditionAccordingNTD(steam5,fuel5,kpdMin5,boiler5));
+//            steam1 += 11;
+//            kpdMin1 += 0.8f;
+//            fuel1 = 100*(steam1*0.6f)/(kpdMin1*7);
+//            steam2 += 11;
+//            kpdMin2 += 0.8f;
+//            fuel2 = 100*(steam2*0.6f)/(kpdMin2*7);
+//            steam5 += 21;
+//            kpdMin5 += 0.8f;
+//            fuel5 = 100*(steam5*0.6f)/(kpdMin5*7);
+//            boilerNTD1.add(new BoilerConditionAccordingNTD(steam1,fuel1,kpdMin1,boiler1));
+//            boilerNTD2.add(new BoilerConditionAccordingNTD(steam2,fuel2,kpdMin2,boiler2));
+//            boilerNTD5.add(new BoilerConditionAccordingNTD(steam5,fuel5,kpdMin5,boiler5));
 //        }
-//        System.out.println("boilerCondition: ");
-//        System.out.println(boilerNTDRepository.saveAll(boilerConditions1));
-//        System.out.println(boilerNTDRepository.saveAll(boilerConditions5));
-//
-//        Set<BoilerCondition> boiler1Condition = new HashSet<>();
-//        Set<BoilerCondition> boiler5Condition = new HashSet<>();
-//        for (int i = 0; i < 10; i++) {
+//        boilerNTDRepository.saveAll(boilerNTD2);
+//        boilerNTDRepository.saveAll(boilerNTD1);
+//        boilerNTDRepository.saveAll(boilerNTD5);
+//            steam2 = 116;
+//            kpdMin2 = 90.2f;
+//            fuel2 = 100*(steam2*0.6f)/(kpdMin2*7);
 //            steam1 = 188;
 //            kpdMin1 = 94.4f;
 //            fuel1 = (steam1*0.6f)/(kpdMin1*7/100);
 //            steam5 = 378;
 //            kpdMin5 = 95.4f;
 //            fuel5 = (steam5*0.6f)/(kpdMin5*7/100);
-//            boiler1Condition.add(new BoilerCondition(LocalDateTime.now().plusMinutes(1l+i).withSecond(0),
+//            boilerConditionRepository.save(
+//                    new BoilerCondition(LocalDateTime.now().withSecond(0).withNano(0),
 //                    steam1,fuel1,kpdMin1,boiler1));
-//            boiler5Condition.add(new BoilerCondition(LocalDateTime.now().plusMinutes(1l+i).withSecond(0),
+//            boilerConditionRepository.save(
+//                    new BoilerCondition(LocalDateTime.now().withNano(0).withSecond(0),
 //                    steam5,fuel5,kpdMin5,boiler5));
-//        }
+//            boilerConditionRepository.save(
+//                    new BoilerCondition(LocalDateTime.now().withSecond(0)
+//                .withNano(0),steam2,fuel2,kpdMin2,boiler2));
 //        System.out.println("boilerCondition");
 //        System.out.println(boilerConditionRepository.saveAll(boiler1Condition));
 //        System.out.println(boilerConditionRepository.saveAll(boiler5Condition));

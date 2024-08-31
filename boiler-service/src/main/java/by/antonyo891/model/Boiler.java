@@ -21,16 +21,17 @@ public class Boiler {
     @Column(name = "boilers_name",unique = true)
     private String name;
 
-    @ManyToOne
-//    @JoinColumn(name = "type_of_boiler_id")
+    @ManyToOne()
+    @JoinColumn(name = "type_of_boiler_id")
+    @JsonIgnore
     private TypeOfBoiler typeOfBoiler;
 
-    @OneToMany(mappedBy = "boilerCondition")
+    @OneToMany(mappedBy = "boilerCondition",fetch = FetchType.EAGER)
     @JsonIgnore
     private Set<BoilerCondition> boilerConditions= new HashSet<>();
-    @OneToMany(mappedBy = "boilerNTD")
+    @OneToMany(mappedBy = "boilerNTD",fetch = FetchType.EAGER)
     @JsonIgnore
-    private Set<BoilerConditionAccordingNTD> boilerConditionAccordingNTDS = new HashSet<>();
+    private Set<BoilerConditionAccordingNTD> boilersNTDS = new HashSet<>();
 
     public Boiler(String name, TypeOfBoiler typeOfBoiler) {
         this.name = name;

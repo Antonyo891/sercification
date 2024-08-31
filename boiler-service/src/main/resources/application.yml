@@ -1,5 +1,5 @@
 boiler-service-properties:
-  base-survey-range: 60 000
+  base-survey-range: 60000
   basic-steam-load-step: 5
   minimum_boiler_load: 0.5
 

@@ -9,4 +9,5 @@ import java.util.UUID;
 public interface BoilerRepository extends JpaRepository<Boiler, UUID> {
 
     Optional<Boiler> findByName(String name);
+
 }

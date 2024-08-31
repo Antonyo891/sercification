@@ -29,9 +29,9 @@ public class BoilerCondition {
     @Column(name = "efficiency_coefficient")
     private Float efficiencyCoefficient;
 
-    @ManyToOne
-//    @JsonIgnore
-//    @JoinColumn(name = "boiler_id")
+    @ManyToOne()
+    @JsonIgnore
+    @JoinColumn(name = "boiler_id")
     private Boiler boilerCondition;
 
     public BoilerCondition(LocalDateTime localDateTime, Integer steamConsumption, Float fuelConsumption, Float efficiencyCoefficient, Boiler boiler) {
