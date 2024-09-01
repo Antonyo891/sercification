@@ -25,8 +25,8 @@ public class BoilerConditionAccordingNTD {
     @Column(name = "efficiency_coefficient")
     private Float efficiencyCoefficient;
 
-    @ManyToOne()
-    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+//    @JsonIgnore
     @JoinColumn(name = "boiler_id")
     private Boiler boilerNTD;
 
@@ -35,5 +35,10 @@ public class BoilerConditionAccordingNTD {
         this.fuelConsumption = fuelConsumption;
         this.efficiencyCoefficient = efficiencyCoefficient;
         this.boilerNTD = boiler;
+    }
+    public BoilerConditionAccordingNTD(Integer steamConsumption, Float fuelConsumption, Float efficiencyCoefficient) {
+        this.steamConsumption = steamConsumption;
+        this.fuelConsumption = fuelConsumption;
+        this.efficiencyCoefficient = efficiencyCoefficient;
     }
 }

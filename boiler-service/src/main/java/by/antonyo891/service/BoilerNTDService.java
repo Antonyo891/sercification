@@ -18,6 +18,8 @@ public class BoilerNTDService {
     @Autowired
     BoilerNTDRepository boilerNTDRepository;
     @Autowired
+    BoilerService boilerService;
+    @Autowired
     BoilerConditionService boilerConditionService;
     @Autowired
     BoilerProperties boilerProperties;
@@ -114,7 +116,6 @@ public class BoilerNTDService {
         }
         return resultList;
     }
-
     private BoilerConditionAccordingNTD findNTD(Boiler boiler, Integer steamConsumption){
         ArrayList<BoilerConditionAccordingNTD> boilerNTD = boilerNTDRepository.findByBoilerNTD(boiler);
         BoilerConditionAccordingNTD foundNTD =
@@ -137,7 +138,6 @@ public class BoilerNTDService {
         return foundNTD;
     }
 
-
     public Map<BoilerCondition, BoilerConditionAccordingNTD> assessCondition() {
         Set<BoilerCondition> boilerConditionByNow = boilerConditionService.getBoilerConditionByNow();
         Map<BoilerCondition, BoilerConditionAccordingNTD> map = new HashMap<>();
@@ -145,5 +145,19 @@ public class BoilerNTDService {
             map.putAll(getBoilerNTDByCondition(boilerCondition));
         }
         return map;
+    }
+    public List<BoilerConditionAccordingNTD> findNTDByBoiler(UUID boilerId){
+        Boiler boilerForNtd = boilerService.getBoiler(boilerId);
+        List<BoilerConditionAccordingNTD> boilerNTD= boilerNTDRepository.findByBoilerNTD(boilerForNtd);
+        if (boilerNTD==null) throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                "Not found NTD for boiler with UUID +" + boilerId + ".");
+        return boilerNTD;
+    }
+
+    public BoilerConditionAccordingNTD addNTD(BoilerConditionAccordingNTD ntd, UUID boilerId) {
+        Boiler boiler =boilerService.getBoiler(boilerId);
+        ntd.setBoilerNTD(boiler);
+        boilerNTDRepository.save(ntd);
+        return ntd;
     }
 }

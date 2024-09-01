@@ -3,6 +3,7 @@ package by.antonyo891.api;
 import by.antonyo891.model.Boiler;
 import by.antonyo891.model.BoilerCondition;
 import by.antonyo891.model.BoilerConditionAccordingNTD;
+import by.antonyo891.model.TypeOfBoiler;
 import by.antonyo891.repository.BoilerRepository;
 import by.antonyo891.service.BoilerConditionServiceInterface;
 import by.antonyo891.service.BoilerNTDService;
@@ -21,6 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Controller
 @Slf4j
@@ -37,12 +39,14 @@ public class BoilerController {
     BoilerNTDService boilerNTDService;
 @GetMapping(path = "/boilers")
 @ResponseBody
-public ResponseEntity<List<Boiler>> getBoilers() {
+public ResponseEntity<Map<Boiler,String>> getBoilers() {
     log.info("Request boilers");
     List<Boiler> boilers = boilerService.findAll();
+    Map<Boiler,String> result = boilers.stream()
+                    .collect(Collectors.toMap(s->s,s->s.getTypeOfBoiler().getName()));
     log.info("Boilers :{}", boilers.stream().map(Boiler::getName));
     return ResponseEntity.status(HttpStatus.OK)
-            .body(boilers);
+            .body(result);
 }
 
     @GetMapping(path = "/conditions")

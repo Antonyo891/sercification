@@ -10,26 +10,34 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.UUID;
+
 @Service
 public class BoilerService implements BoilerServiceInterface{
     @Autowired
-    BoilerRepository boilerRepository;
+    private BoilerRepository boilerRepository;
     @Autowired
-    TypeOfBoilerRepository typeOfBoilerRepository;
+    private TypeOfBoilerRepository typeOfBoilerRepository;
     @Autowired
-    BoilerNTDRepository ntdRepository;
+    private BoilerNTDRepository ntdRepository;
 
     @Override
     public List<Boiler> findAll() {
-        List<Boiler> boilers = boilerRepository.findAll();
-        return boilers;
+        return boilerRepository.findAll();
     }
 
     @Override
-    public Boiler getBoilerByName(String name) {
+    public Boiler getBoiler(String name) {
         return boilerRepository.findByName(name).orElseThrow(
                 ()->new ResponseStatusException(HttpStatus.NOT_FOUND,
                         "Boiler with name " + name + " not found;")
         );
+    }
+
+    @Override
+    public Boiler getBoiler(UUID boilerId) {
+        return boilerRepository.findById(boilerId)
+                .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "Boiler with UUID " + boilerId + " not found;"));
     }
 }

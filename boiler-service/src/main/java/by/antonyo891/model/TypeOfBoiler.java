@@ -26,7 +26,7 @@ public class TypeOfBoiler {
     @Column(name = "nominal_steam_temperature", length = 3)
     private Integer nominalSteamTemperature;
     @OneToMany(
-    mappedBy = "typeOfBoiler",fetch = FetchType.LAZY)
+    mappedBy = "typeOfBoiler")
     @JsonIgnore
     private Set<Boiler> boilers = new HashSet<>();
 

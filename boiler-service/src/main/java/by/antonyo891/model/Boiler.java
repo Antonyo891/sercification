@@ -21,15 +21,15 @@ public class Boiler {
     @Column(name = "boilers_name",unique = true)
     private String name;
 
-    @ManyToOne()
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "type_of_boiler_id")
     @JsonIgnore
     private TypeOfBoiler typeOfBoiler;
 
-    @OneToMany(mappedBy = "boilerCondition",fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "boilerCondition")
     @JsonIgnore
     private Set<BoilerCondition> boilerConditions= new HashSet<>();
-    @OneToMany(mappedBy = "boilerNTD",fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "boilerNTD")
     @JsonIgnore
     private Set<BoilerConditionAccordingNTD> boilersNTDS = new HashSet<>();
 
