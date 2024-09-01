@@ -83,9 +83,6 @@ public class BoilerApplication {
 //                    steam5,fuel5,kpdMin5,boiler5));
 //            boilerConditionRepository.save(
 //                    new BoilerCondition(LocalDateTime.now().withSecond(0)
-//                .withNano(0),steam2,fuel2,kpdMin2,boiler2));
-//        System.out.println("boilerCondition");
-//        System.out.println(boilerConditionRepository.saveAll(boiler1Condition));
-//        System.out.println(boilerConditionRepository.saveAll(boiler5Condition));
+//                .withNano(0),steam2,fuel2,kpdMin2,boiler2))
     }
 }
