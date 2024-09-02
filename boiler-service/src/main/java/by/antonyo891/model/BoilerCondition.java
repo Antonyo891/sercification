@@ -30,7 +30,7 @@ public class BoilerCondition {
     private Float efficiencyCoefficient;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnore
+//    @JsonIgnore
     @JoinColumn(name = "boiler_id")
     private Boiler boilerCondition;
 

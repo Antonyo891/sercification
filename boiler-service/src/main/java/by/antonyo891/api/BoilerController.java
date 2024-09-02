@@ -37,17 +37,15 @@ public class BoilerController {
     TypeOfBoilerService typeOfBoilerService;
     @Autowired
     BoilerNTDService boilerNTDService;
-@GetMapping(path = "/boilers")
-@ResponseBody
-public ResponseEntity<Map<Boiler,String>> getBoilers() {
-    log.info("Request boilers");
-    List<Boiler> boilers = boilerService.findAll();
-    Map<Boiler,String> result = boilers.stream()
-                    .collect(Collectors.toMap(s->s,s->s.getTypeOfBoiler().getName()));
-    log.info("Boilers :{}", boilers.stream().map(Boiler::getName));
-    return ResponseEntity.status(HttpStatus.OK)
-            .body(result);
-}
+    @GetMapping(path = "/boilers")
+    @ResponseBody
+    public ResponseEntity<List<Boiler>> getBoilers() {
+        log.info("Request boilers");
+        List<Boiler> boilers = boilerService.findAll();
+        log.info("Boilers :{}", boilers.stream().map(Boiler::getName));
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(boilers);
+    }
 
     @GetMapping(path = "/conditions")
     @ResponseBody

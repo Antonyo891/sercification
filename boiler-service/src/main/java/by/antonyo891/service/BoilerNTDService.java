@@ -20,6 +20,8 @@ public class BoilerNTDService {
     @Autowired
     BoilerService boilerService;
     @Autowired
+    TypeOfBoilerService typeOfBoilerService;
+    @Autowired
     BoilerConditionService boilerConditionService;
     @Autowired
     BoilerProperties boilerProperties;
@@ -147,6 +149,7 @@ public class BoilerNTDService {
         return map;
     }
     public List<BoilerConditionAccordingNTD> findNTDByBoiler(UUID boilerId){
+        List<TypeOfBoiler> typeOfBoilerList = typeOfBoilerService.getAll();
         Boiler boilerForNtd = boilerService.getBoiler(boilerId);
         List<BoilerConditionAccordingNTD> boilerNTD= boilerNTDRepository.findByBoilerNTD(boilerForNtd);
         if (boilerNTD==null) throw new ResponseStatusException(HttpStatus.NOT_FOUND,

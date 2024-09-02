@@ -1,6 +1,5 @@
 package by.antonyo891.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,7 +25,6 @@ public class BoilerConditionAccordingNTD {
     private Float efficiencyCoefficient;
 
     @ManyToOne(fetch = FetchType.LAZY)
-//    @JsonIgnore
     @JoinColumn(name = "boiler_id")
     private Boiler boilerNTD;
 

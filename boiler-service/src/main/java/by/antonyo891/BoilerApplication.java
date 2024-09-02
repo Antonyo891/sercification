@@ -1,5 +1,7 @@
 package by.antonyo891;
 
+import by.antonyo891.api.BoilerController;
+import by.antonyo891.api.BoilerNTDController;
 import by.antonyo891.model.Boiler;
 import by.antonyo891.model.BoilerCondition;
 import by.antonyo891.model.BoilerConditionAccordingNTD;
@@ -28,6 +30,8 @@ public class BoilerApplication {
 //        BoilerConditionRepository boilerConditionRepository = context.getBean(BoilerConditionRepository.class);
 //        BoilerNTDRepository boilerNTDRepository = context.getBean(BoilerNTDRepository.class);
 //        BoilerRepository boilerRepository = context.getBean(BoilerRepository.class);
+        BoilerController boilerController = context.getBean(BoilerController.class);
+        BoilerNTDController NTDController = context.getBean(BoilerNTDController.class);
 //        TypeOfBoilerRepository typeOfBoilerRepository = context.getBean(TypeOfBoilerRepository.class);
 //        TypeOfBoiler type1 = typeOfBoilerRepository.findByName("БКЗ-210-140").get();
 //        TypeOfBoiler type2 = typeOfBoilerRepository.findByName("БКЗ-420-140").get();

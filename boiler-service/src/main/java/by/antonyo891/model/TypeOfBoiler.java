@@ -1,11 +1,11 @@
 package by.antonyo891.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -13,6 +13,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "boilers_types")
 @NoArgsConstructor
+@JsonIgnoreProperties({"boilers"})
 public class TypeOfBoiler {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -28,7 +29,7 @@ public class TypeOfBoiler {
     @OneToMany(
     mappedBy = "typeOfBoiler")
     @JsonIgnore
-    private Set<Boiler> boilers = new HashSet<>();
+    private Set<Boiler> boilers;
 
     public TypeOfBoiler(String name, Integer nominalSteamCapacity, Integer nominalSteamPressure, Integer nominal_Steam_temperature) {
         this.name = name;

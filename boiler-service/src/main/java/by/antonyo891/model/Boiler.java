@@ -1,11 +1,12 @@
 package by.antonyo891.model;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -23,15 +24,15 @@ public class Boiler {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "type_of_boiler_id")
-    @JsonIgnore
     private TypeOfBoiler typeOfBoiler;
 
     @OneToMany(mappedBy = "boilerCondition")
     @JsonIgnore
-    private Set<BoilerCondition> boilerConditions= new HashSet<>();
+    private Set<BoilerCondition> boilerConditions;
+
     @OneToMany(mappedBy = "boilerNTD")
     @JsonIgnore
-    private Set<BoilerConditionAccordingNTD> boilersNTDS = new HashSet<>();
+    private Set<BoilerConditionAccordingNTD> boilersNTDS;
 
     public Boiler(String name, TypeOfBoiler typeOfBoiler) {
         this.name = name;

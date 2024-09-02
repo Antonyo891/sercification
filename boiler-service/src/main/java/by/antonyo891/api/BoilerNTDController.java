@@ -32,7 +32,7 @@ public class BoilerNTDController {
 public ResponseEntity<List<BoilerConditionAccordingNTD>> getNTDbyBoiler(@PathVariable("boilerId") UUID boilerId) {
     log.info("Request NTD for boiler with id: {}",boilerId);
     List<BoilerConditionAccordingNTD> ntds = boilerNTDService.findNTDByBoiler(boilerId);
-    log.info("BoilersNTD :{}", ntds);
+    log.info("BoilersNTD :{}", ntds.stream().map(BoilerConditionAccordingNTD::getId));
     return ResponseEntity.status(HttpStatus.OK)
             .body(ntds);
 }
