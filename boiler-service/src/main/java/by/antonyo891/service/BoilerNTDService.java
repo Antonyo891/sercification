@@ -36,11 +36,12 @@ public class BoilerNTDService {
     private BoilerConditionAccordingNTD getInterpolation(BoilerConditionAccordingNTD first,
                                                          BoilerConditionAccordingNTD second,
                                                          Integer factSteamConsumption){
-        float fraction = (float) ((factSteamConsumption-first.getSteamConsumption()) /
-                (second.getSteamConsumption() - factSteamConsumption));
-        float fuelConsumption = (float) (second.getFuelConsumption() -
-                first.getFuelConsumption())*fraction + first.getFuelConsumption();
-        Float efficiencyCoefficient = (float) ((factSteamConsumption * 0.6 / (fuelConsumption * 7))*100);
+        float fraction = ((float) (factSteamConsumption-first.getSteamConsumption()) /
+                (second.getSteamConsumption() - first.getSteamConsumption()));
+        float fuelConsumption = (second.getFuelConsumption() -
+                first.getFuelConsumption()) *fraction + first.getFuelConsumption();
+        float efficiencyCoefficient =  ((float) (factSteamConsumption * 0.6 )/
+                (fuelConsumption * 7))*100;
             BoilerConditionAccordingNTD resultNTD = new BoilerConditionAccordingNTD();
         resultNTD.setFuelConsumption(fuelConsumption);
         resultNTD.setEfficiencyCoefficient(efficiencyCoefficient);
@@ -53,9 +54,9 @@ public class BoilerNTDService {
         Integer sumSteamConsumption = boilerConditions.stream()
                 .map(BoilerCondition::getSteamConsumption).toList()
                 .stream().reduce(0,Integer::sum);
-        Float sumFuel = boilerConditions.stream()
-                .map(BoilerCondition::getFuelConsumption).toList().stream()
-                .reduce(0f,Float::sum);
+//        Float sumFuel = boilerConditions.stream()
+//                .map(BoilerCondition::getFuelConsumption).toList().stream()
+//                .reduce(0f,Float::sum);
         List<BoilerConditionAccordingNTD> boilerConditionAccordingNTDList =
                 boilerConditions.stream()
                         .map(c->getBoilerNTDByCondition(c).values().stream()
@@ -63,34 +64,35 @@ public class BoilerNTDService {
                                 .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,
                                         getClass().getName()+" not found boilerConditions")))
                         .toList();
-        return findOptimalRegime(boilerConditionAccordingNTDList,
+        List<BoilerConditionAccordingNTD> optimalRegime = findOptimalRegime(boilerConditionAccordingNTDList,
                 sumSteamConsumption);
+
+        return optimalRegime;
     }
     private List<BoilerConditionAccordingNTD> findOptimalRegime(List<BoilerConditionAccordingNTD> startNTD,
                                                                 int steamConsumption){
         List<BoilerConditionAccordingNTD> resultList = new ArrayList<>(startNTD);
-        float minFuel = startNTD.stream().map(BoilerConditionAccordingNTD::getFuelConsumption)
-                .reduce(0f,Float::sum);
         List<BoilerConditionAccordingNTD> NTD = new ArrayList<>(startNTD);
         BoilerConditionAccordingNTD conditionAccordingNTD = NTD.removeFirst();
-        Integer remainingSteamConsumption = NTD.stream().map(BoilerConditionAccordingNTD::getBoilerNTD)
+        int remainingMaxSteamConsumption = NTD.stream().map(BoilerConditionAccordingNTD::getBoilerNTD)
                         .map(Boiler::getTypeOfBoiler)
                         .map(TypeOfBoiler::getNominalSteamCapacity)
 //                .map(s-> (int) (s*boilerProperties.getMinimumBoilerLoad()))
                         .reduce(0,Integer::sum);
-        Integer maxSteamConsumption = steamConsumption -
-                (int)(remainingSteamConsumption* boilerProperties.getMinimumBoilerLoad());
-        Integer minSteamConsumption = steamConsumption - remainingSteamConsumption;
-        Integer technicalMax = conditionAccordingNTD.getBoilerNTD()
+        int maxSteamConsumption = steamConsumption -
+                (int)(remainingMaxSteamConsumption* boilerProperties.getMinimumBoilerLoad());
+        int minSteamConsumption = steamConsumption - remainingMaxSteamConsumption;
+        int technicalMax = conditionAccordingNTD.getBoilerNTD()
                 .getTypeOfBoiler().getNominalSteamCapacity();
-        Integer technicalMin = (int) (technicalMax * boilerProperties.getMinimumBoilerLoad());
+        int technicalMin = (int) (technicalMax * boilerProperties.getMinimumBoilerLoad());
         if (maxSteamConsumption>technicalMax) maxSteamConsumption = technicalMax;
         if (minSteamConsumption<technicalMin) minSteamConsumption = technicalMin;
+        float minFuel = steamConsumption*0.6f/(7f*0.8f);
         float fuelTemp;
-        BoilerConditionAccordingNTD NTDFirst;
+        BoilerConditionAccordingNTD NTDFirst = new BoilerConditionAccordingNTD();
         if (NTD.size()<2) {
-            BoilerConditionAccordingNTD NTDSecond;
-            for (int i = minSteamConsumption; i < maxSteamConsumption ; i+=boilerProperties.getBasicSteamLoadStep()) {
+            BoilerConditionAccordingNTD NTDSecond = new BoilerConditionAccordingNTD();;
+            for (int i = minSteamConsumption; i <= maxSteamConsumption ; i+=boilerProperties.getBasicSteamLoadStep()) {
                 NTDFirst = findNTD(conditionAccordingNTD.getBoilerNTD(),i);
                 NTDSecond = findNTD(NTD.getFirst().getBoilerNTD(), steamConsumption - i);
                 fuelTemp = NTDFirst.getFuelConsumption() + NTDSecond.getFuelConsumption();
@@ -101,10 +103,10 @@ public class BoilerNTDService {
             }
             return resultList;
         }
-        List<BoilerConditionAccordingNTD> otherNTD;
-        for (int i = minSteamConsumption; i < maxSteamConsumption; i+=boilerProperties.getBasicSteamLoadStep()) {
+        List<BoilerConditionAccordingNTD> otherNTD = new ArrayList<>();
+        for (int i = minSteamConsumption; i <= maxSteamConsumption; i+=boilerProperties.getBasicSteamLoadStep()) {
             NTDFirst = findNTD(conditionAccordingNTD.getBoilerNTD(),i);
-            otherNTD = findOptimalRegime(NTD,remainingSteamConsumption);
+            otherNTD = findOptimalRegime(NTD,steamConsumption-i);
             fuelTemp = NTDFirst.getFuelConsumption() +
                     otherNTD.stream()
                             .map(BoilerConditionAccordingNTD::getFuelConsumption)
@@ -119,6 +121,7 @@ public class BoilerNTDService {
         return resultList;
     }
     private BoilerConditionAccordingNTD findNTD(Boiler boiler, Integer steamConsumption){
+        List<TypeOfBoiler> typeOfBoilerList = typeOfBoilerService.getAll();
         ArrayList<BoilerConditionAccordingNTD> boilerNTD = boilerNTDRepository.findByBoilerNTD(boiler);
         BoilerConditionAccordingNTD foundNTD =
                 boilerNTD.stream().
@@ -158,9 +161,18 @@ public class BoilerNTDService {
     }
 
     public BoilerConditionAccordingNTD addNTD(BoilerConditionAccordingNTD ntd, UUID boilerId) {
+        List<TypeOfBoiler> typeOfBoilerList = typeOfBoilerService.getAll();
         Boiler boiler =boilerService.getBoiler(boilerId);
         ntd.setBoilerNTD(boiler);
         boilerNTDRepository.save(ntd);
         return ntd;
+    }
+    public List<BoilerConditionAccordingNTD> addAllNTD(List<BoilerConditionAccordingNTD> ntdList) {
+        List<TypeOfBoiler> typeOfBoilerList = ntdList.stream()
+                .map(BoilerConditionAccordingNTD::getBoilerNTD)
+                .map(Boiler::getTypeOfBoiler).toList();
+        Boiler boiler =ntdList.getFirst().getBoilerNTD();
+        boilerNTDRepository.saveAll(ntdList);
+        return ntdList;
     }
 }

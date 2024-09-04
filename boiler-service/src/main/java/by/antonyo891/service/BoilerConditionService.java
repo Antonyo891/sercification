@@ -28,12 +28,10 @@ public class BoilerConditionService implements BoilerConditionServiceInterface  
     public Set<BoilerCondition> getBoilerConditionByNow(){
         List<TypeOfBoiler> typeOfBoilerList = typeOfBoilerService.getAll();
         Set<Boiler> boilers = new HashSet<>(boilerServiceInterface.findAll());
+//        typeOfBoilerList = typeOfBoilerService.getAllByBoilers(boilers);
         return new HashSet<>(boilers.stream()
                 .map(this::getConditionNow).toList());
-
-
     }
-
     @Override
     public BoilerCondition getConditionNow(Boiler boiler) {
         List<TypeOfBoiler> typeOfBoilerList = typeOfBoilerService.getAll();

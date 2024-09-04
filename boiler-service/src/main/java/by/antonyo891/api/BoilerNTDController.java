@@ -1,6 +1,5 @@
 package by.antonyo891.api;
 
-import by.antonyo891.model.Boiler;
 import by.antonyo891.model.BoilerConditionAccordingNTD;
 import by.antonyo891.service.BoilerNTDService;
 import by.antonyo891.service.BoilerServiceInterface;
@@ -21,10 +20,6 @@ import java.util.*;
 public class BoilerNTDController {
     @Autowired
     private BoilerServiceInterface boilerService;
-//    @Autowired
-//    BoilerConditionServiceInterface boilerConditionService;
-//    @Autowired
-//    TypeOfBoilerService typeOfBoilerService;
     @Autowired
     BoilerNTDService boilerNTDService;
 @GetMapping(path = "/{boilerId}")

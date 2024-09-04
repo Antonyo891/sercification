@@ -12,6 +12,8 @@ import by.antonyo891.repository.BoilerRepository;
 import by.antonyo891.repository.TypeOfBoilerRepository;
 import by.antonyo891.service.BoilerConditionService;
 import by.antonyo891.service.BoilerNTDService;
+import by.antonyo891.service.BoilerService;
+import by.antonyo891.service.TypeOfBoilerService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -27,19 +29,16 @@ public class BoilerApplication {
     public static void main(String[] args) {
 
         ConfigurableApplicationContext context = SpringApplication.run(BoilerApplication.class, args);
-//        BoilerConditionRepository boilerConditionRepository = context.getBean(BoilerConditionRepository.class);
-//        BoilerNTDRepository boilerNTDRepository = context.getBean(BoilerNTDRepository.class);
-//        BoilerRepository boilerRepository = context.getBean(BoilerRepository.class);
-        BoilerController boilerController = context.getBean(BoilerController.class);
-        BoilerNTDController NTDController = context.getBean(BoilerNTDController.class);
-//        TypeOfBoilerRepository typeOfBoilerRepository = context.getBean(TypeOfBoilerRepository.class);
-//        TypeOfBoiler type1 = typeOfBoilerRepository.findByName("БКЗ-210-140").get();
-//        TypeOfBoiler type2 = typeOfBoilerRepository.findByName("БКЗ-420-140").get();
-//        type1 = typeOfBoilerRepository.save(type1);
-//        type2 = typeOfBoilerRepository.save(type2);
-//        Boiler boiler1 = boilerRepository.findByName("station # 1").get();
-//        Boiler boiler5 = boilerRepository.findByName("station # 5").get();
-//        Boiler boiler2 = boilerRepository.findByName("station # 2").get();
+//        BoilerNTDService boilerNTDService = context.getBean(BoilerNTDService.class);
+//        BoilerService boilerService = context.getBean(BoilerService.class);
+//        BoilerController boilerController = context.getBean(BoilerController.class);
+//        BoilerNTDController NTDController = context.getBean(BoilerNTDController.class);
+//        TypeOfBoilerService typeOfBoilerService = context.getBean(TypeOfBoilerService.class);
+//        TypeOfBoiler type1 = typeOfBoilerService.getTypeByName("БКЗ-210-140");
+//        TypeOfBoiler type2 = typeOfBoilerService.getTypeByName("БКЗ-420-140");
+//        Boiler boiler1 = boilerService.getBoiler("station # 1");
+//        Boiler boiler5 = boilerService.getBoiler("station # 5");
+//        Boiler boiler2 = boilerService.getBoiler("station # 2");
 //        float kpdMin1 = 88.0f;
 //        int steam1 = 100;
 //        float fuel1;
@@ -50,9 +49,9 @@ public class BoilerApplication {
 //        float kpdMin5 = 89.6f;
 //        float fuel5;
 //
-//        Set<BoilerConditionAccordingNTD> boilerNTD1 = new HashSet<>();
-//        Set<BoilerConditionAccordingNTD> boilerNTD2 = new HashSet<>();
-//        Set<BoilerConditionAccordingNTD> boilerNTD5 = new HashSet<>();
+//        List<BoilerConditionAccordingNTD> boilerNTD1 = new ArrayList<>();
+//        List<BoilerConditionAccordingNTD> boilerNTD2 = new ArrayList<>();
+//        List<BoilerConditionAccordingNTD> boilerNTD5 = new ArrayList<>();
 //        for (int i = 0; i<=10; i++){
 //            fuel1 = 100*(steam1*0.6f)/(kpdMin1*7);
 //            fuel2 = 100*(steam2*0.6f)/(kpdMin2*7);
@@ -67,9 +66,9 @@ public class BoilerApplication {
 //            steam5 += 21;
 //            kpdMin5 += 0.8f;
 //        }
-//        boilerNTDRepository.saveAll(boilerNTD2);
-//        boilerNTDRepository.saveAll(boilerNTD1);
-//        boilerNTDRepository.saveAll(boilerNTD5);
+//        boilerNTDService.addAllNTD(boilerNTD2);
+//        boilerNTDService.addAllNTD(boilerNTD1);
+//        boilerNTDService.addAllNTD(boilerNTD5);
 //            steam2 = 116;
 //            kpdMin2 = 90.2f;
 //            fuel2 = 100*(steam2*0.6f)/(kpdMin2*7);
